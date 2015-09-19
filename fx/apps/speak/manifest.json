@@ -1,0 +1,8 @@
+{"name":"speak",
+  "desc":"speaks a block when clicked",
+  "enabled":"true",
+  "files":[
+    "speak.css",
+    "speak.js",
+    "speak.html"
+  ]}
