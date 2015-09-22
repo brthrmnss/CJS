@@ -1,0 +1,112 @@
+Priorities for SPGRT2
+
+1.	Implement AngularJS Routing – Simplify navigation structure to use AngularJS routes, instead of propriety system.
+a.	Benefits: Simplify structure for future development
+b.	Cons:
+c.	Timeline: 1 Week
+d.	Goals:
+i.	buildNavMenu_step1_ - Standard Retre
+ii.	_step2 – Filter Menu
+iii.	_step3 – blank step to be extended by future devs. Adds additional level of filtering for different groups
+
+2.	UI Implementation
+a.	Standardize styles across application navbar and sidebar
+b.	Implement ‘Search’ filtering
+c.	Store app name in config file  clientConfig.js - defaults
+3.	The Print All – Opco 
+a.	Refactoring code
+b.	Improvements ‘Brittle’
+c.	Verify TOC 
+
+4.	Streamline content loading process
+a.	At startup, only load scripts for current content (load times)
+b.	Dynamically load files for content 
+c.	Support pre-reloading content pages 
+d.	Core vs app
+5.	Deep-linking report “State” 
+a.	URL params
+b.	Save User Settings – per page 
+c.	Persist to cookie
+d.	User returns to existing page
+e.	User’s old settings
+f.	Bookmark sections of charts using id
+g.	Store scroll position - Scroll to chart 
+
+6.	Performance Refactor for older content pages 
+a.	“Mark”
+b.	Revenue  “Desk” changed for aged 
+
+7.	Responsive Design 
+a.	Review needs based on content page - Help with going to mobile
+b.	“Dealer Holdings”
+
+8.	Caching Server
+a.	Risk Trades
+b.	Volk Summary 
+9.	Date conversion from AngularJS to Kdb
+10.	Low Hanging UI
+a.	Filenames for exporting parameters (Export CSV) file 
+b.	Date drop-down – 3 list options in bottom of date picker
+c.	List of colors for various series.  – series of colors, ability to override 
+d.	High charts duplicate content for print
+11.	Controller As Syntax
+
+12.	Smart Transitions	
+a.	Interaction design link
+13.	Build Dev Reloading System
+a.	
+14.	Showcase 
+a.	Demos for how to style content pages
+b.	Table
+
+ 
+Should main adjustNavbar be in mainModule.js
+What is child.view …. Wha tis fileteredDesks
+Priorities for SPGRT2
+
+15.	Implement AngularJS Routing - Refactor Navigation for AngularJS Routing – Simplify navigation structure to use AngularJS routes, instead of propriety system.
+a.	Benefits: Simplify structure for future development
+b.	Dynamically load javascript files for pages. – hwo to scale? 
+c.	Cons:
+d.	Timeline: 1 Week
+e.	Goals:
+f.	buildNavMenu_step1_ - Standard Retre
+g.	_step2 – Filter Menu
+h.	_step3 – blank step to be extended by future devs. Adds additional level of filtering for different groups
+
+16.	UI Implementation
+a.	Standardize styles across application navigation bar
+b.	Product demo that shows files
+
+17.	Streamline content loading process
+a.	At startup, only load scripts and styles for content page. Decrease startup time
+b.	Support pre-reloading content pages 
+18.	Deep-linking report “State” 
+a.	URL params
+b.	Save User Settings – per page 
+c.	Persist to cookie
+d.	User returns to existing page
+e.	User’s old settings
+f.	Bookmark sections of charts using id
+g.	Store scroll position - Scroll to chart 
+
+19.	Performance Refactor for older content pages 
+a.	“Eriq’s”
+b.	Revenue  “Desk” changed for aged 
+
+20.	Responsive Design 
+a.	Review needs based on content page - Help with going to mobile
+
+21.	Caching Server
+a.	Risk Trades
+b.	Volk Summary 
+22.	Date conversion from AngularJS to Kdb
+
+23.	Smart Transitions	
+a.	Interaction design link
+24.	Build Dev Reloading System
+a.	
+25.	Showcase 
+a.	Demos for how to style content pages
+b.	Table
+
