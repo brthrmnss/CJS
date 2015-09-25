@@ -1,0 +1,72 @@
+
+var socket = require('socket.io-client')('http://localhost:3001');
+socket.on('connect', function(){});
+socket.on('event', function(data){});
+socket.on('disconnect', function(){});
+//socket.emit('window.invoke', 'quickreloadable.dir.html')
+
+var sendData = {};
+
+sendData = 'reloadcss';
+var fs = require('fs');
+
+socket.emit('window.invoke', sendData);
+
+setTimeout(function () {
+    process.exit()
+    //socket.emit('invoke.window', 'what?...')
+}, 500)
+
+
+
+/**
+ * Created by morriste on 9/24/15.
+ */
+
+
+app.directive('helloWorld2', function helloWorld2Directive($compile) {
+    console.log($compile, '$compile ....')
+    return {
+        scope: {},  // use a new isolated scope
+        restrict: 'AE',
+        replace: true,
+        template: '<h3 style="background-color:{{color}}">Hello World4 $$$REPLACE$$$ </h3>',
+        link:
+            function linkMethod (scope, elem, attrs) {
+                elem.bind('click', function() {
+                    elem.css('background-color', 'white');
+                    scope.$apply(function() {
+                        scope.color = "white";
+                    });
+                });
+                elem.bind('mouseover', function() {
+                    elem.css('cursor', 'pointer');
+                });
+                console.log('in controller')
+            }
+    };
+});
+
+
+
+
+socketio_invokewindow_test_js.js
+var socket = require('socket.io-client')('http://localhost:3001');
+socket.on('connect', function(){});
+socket.on('event', function(data){});
+socket.on('disconnect', function(){});
+//socket.emit('window.invoke', 'quickreloadable.dir.html')
+
+var sendData = {};
+
+sendData.type = 'eval'
+var fs = require('fs');
+sendData.eval = fs.readFileSync('evalNewHelloWorldDirective.js').toString();
+sendData.eval = sendData.eval.replace('$$$REPLACE$$$', (new Date().toString()))
+//sendData.eval = 'clear(); console.log("test");'
+socket.emit('window.invoke', sendData);
+
+setTimeout(function () {
+    process.exit()
+    //socket.emit('invoke.window', 'what?...')
+}, 500)
