@@ -1,0 +1,4 @@
+      <hello-world>
+            77 <h1>hello {{count}} {{vm}} {{vm.count}}</h1>
+            <hello-world2></hello-world2>
+        </hello-world>
