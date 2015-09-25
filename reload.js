@@ -1,22 +1,34 @@
+window.notASource = true;
+
+
+function convertArgumentsToArray(_arguments) {
+    var args = Array.prototype.slice.call(_arguments, 0);
+    return args
+}
+
+function callIfDefined(fx) {
+    if (fx == undefined)
+        return;
+    var args = convertArgumentsToArray(arguments)
+    args = args.slice(1, args.length)
+
+    // console.debug('args', tojson(args))
+    return fx.apply(null, args)
+    //return;
+}
+
+
+function callIfDefined_For(fx, args_) {
+    if (fx == undefined)
+        return;
+    var args = convertArgumentsToArray(args_)
+    return fx.apply(null, args)
+}
+
+
 
 
 var forwardFx = function forwardFx(fxName, fxIfUndef) {
-
-    function convertArgumentsToArray(_arguments) {
-        var args = Array.prototype.slice.call(_arguments, 0);
-        return args
-    }
-
-    function callIfDefined(fx) {
-        if (fx == undefined)
-            return;
-        var args = convertArgumentsToArray(arguments)
-        args = args.slice(1, args.length)
-
-        // console.debug('args', tojson(args))
-        return fx.apply(null, args)
-        //return;
-    }
 
 
     return function controllerStandIn( ) {
@@ -25,8 +37,8 @@ var forwardFx = function forwardFx(fxName, fxIfUndef) {
         if ( fxReloaded != null ) {
             fxForwardTo = fxReloaded;
         };
-        var args = convertArgumentsToArray(arguments)
-        fxForwardTo.apply(this, args)
+        var argsLocal = convertArgumentsToArray(arguments)
+        fxForwardTo.apply(this, argsLocal)
         // callIfDefined(fxForwardTo)
     }
 
@@ -63,18 +75,18 @@ var forwardFx = function forwardFx(fxName, ctrlVal) {
 
 
 
-     function controllerStandIn( ) {
+    function controllerStandIn( ) {
         var fxForwardTo = ctrlVal;
         var fxReloaded = window[fxName];
         if ( fxReloaded != null ) {
             fxForwardTo = fxReloaded;
         };
-        var args = convertArgumentsToArray(arguments)
+        var argsLocal = convertArgumentsToArray(arguments)
         if ( fxForwardTo == null || fxForwardTo == undefined) {
             console.error('null for', '....', fxName)
             asdf.g
         }
-        fxForwardTo.apply(this, args)
+        return fxForwardTo.apply(this, argsLocal)
         // callIfDefined(fxForwardTo)
     }
 
@@ -96,18 +108,190 @@ var forwardFx = function forwardFx(fxName, ctrlVal) {
 
 spgrtApp.controllerOld = spgrtApp.controller;
 
-spgrtApp.controller = function addController(ctrlName, ctrl) {
+spgrtApp.controller2 = function addController(ctrlName, ctrl) {
     // console.error('redirected', ctrlName, ctrl)
     if ( ctrlName == 'dealerHoldingsCtrl') {
         console.error('redirected', ctrlName, ctrl)
-        spgrtApp.controllerOld(ctrlName,  forwardFx(ctrlName, ctrl));
+        spgrtApp.controllerOld(ctrlName, forwardFx(ctrlName, ctrl));
     } else {
-        spgrtApp.controllerOld(ctrlName,   ctrl );
+        spgrtApp.controllerOld(ctrlName, ctrl);
     }
 
 }
 
 
+
+
+
+/*
+ var forwardFxDir = function forwardFx(fxName, ctrlVal) {
+
+
+ var ctrlValOrig = ctrlVal;
+ if ($.isArray(ctrlVal ) ) {
+ var lastParamAsFx = ctrlVal.slice(-1)[0]
+ if ( $.isFunction(lastParamAsFx) ) {
+ ctrlVal =  lastParamAsFx
+ }
+ }
+
+ //update existing window
+ var oldDirective = window[fxName]
+ window[fxName] = ctrlVal;
+ //perform migration
+ if ( oldDirective != null ) {
+ if ( oldDirective.template != null  ) {
+ oldDirective.template = ctrlVal.template;
+ }
+
+ }
+
+
+ function controllerStandIn( ) {
+ var fxForwardTo = ctrlVal;
+ var fxReloaded = window[fxName];
+ if ( fxReloaded != null ) {
+ fxForwardTo = fxReloaded;
+ };
+ var argsLocal = convertArgumentsToArray(arguments)
+ if ( fxForwardTo == null || fxForwardTo == undefined) {
+ console.error('null for', '....', fxName)
+ asdf.g
+ }
+ var directive =  fxForwardTo.apply(this, argsLocal)
+ if ( directive.link != null ) {
+ var oldLinkFx = directive.link;
+ directive.link = function redirectLink() {
+ console.log('redirect link up', ctrlVal)
+ var fxReloadedDirective_LinkFx  = window[fxName];
+ var fxForwardTo = oldLinkFx;
+ if ( fxReloadedDirective_LinkFx != null ) {
+ fxForwardTo = fxReloadedDirective_LinkFx;
+ };
+ return callIfDefined_For(fxForwardTo, arguments);
+ }
+ }
+ return directive;
+ // callIfDefined(fxForwardTo)
+ }
+
+ var controllerStandInVal = controllerStandIn;
+
+ if ($.isArray(ctrlValOrig ) ) {
+ controllerStandInVal = ctrlValOrig
+ controllerStandInVal.pop()
+ controllerStandInVal.push(controllerStandIn)
+ }
+
+
+ return controllerStandInVal
+
+ }
+ */
+var forwardFxDir = function forwardFx(fxName, ctrlVal) {
+
+
+    var directiveName = fxName
+    var ctrlValOrig = ctrlVal;
+    if ($.isArray(ctrlVal ) ) {
+        var lastParamAsFx = ctrlVal.slice(-1)[0]
+        if ( $.isFunction(lastParamAsFx) ) {
+            ctrlVal =  lastParamAsFx
+        }
+    }
+
+    //update existing window
+    var oldDirective = null;
+    if ( window[fxName] != null ) {
+        console.log('alreayd set')
+        var oldDirective = window.directiveInstances[directiveName];
+    }
+
+
+    if (  window.directiveInstances == null )
+        window.directiveInstances = {};
+    window[fxName] = ctrlVal;
+    //perform migration
+    if ( oldDirective != null ) {
+        if ( oldDirective.template != null  ) {
+            var directive_NewestVersion = null;//
+
+            var directive_NewestVersion =  ctrlVal();
+            //need to invoke with proper injections
+            //directive_NewestVersion = spgrtApp.directiveOld(directiveName,ctrlVal);
+            oldDirective.template = directive_NewestVersion.template;
+        }
+
+    }
+
+
+    function directiveStandIn( ) {
+        var fxForwardTo = ctrlVal;
+        var fxReloaded = window[fxName];
+        if ( fxReloaded != null ) {
+            fxForwardTo = fxReloaded;
+        };
+        console.log('stand in invoke', ctrlVal)
+        var argsLocal = convertArgumentsToArray(arguments)
+        if ( fxForwardTo == null || fxForwardTo == undefined) {
+            console.error('null for', '....', fxName)
+            asdf.g
+        }
+        var directive =  fxForwardTo.apply(this, argsLocal)
+        if ( directive.link != null ) {
+            var oldLinkFx = directive.link;
+            directive.link = function redirectLink() {
+                console.log('redirect link up', ctrlVal)
+                var fxReloadedDirective_LinkFx  = window[fxName];
+                var fxForwardTo = oldLinkFx;
+                if ( fxReloadedDirective_LinkFx != null ) {
+                    fxForwardTo = fxReloadedDirective_LinkFx;
+                };
+                return callIfDefined_For(fxForwardTo, arguments);
+            }
+        }
+        window.directiveInstances[directiveName] = directive;
+        return directive;
+        // callIfDefined(fxForwardTo)
+    }
+
+    var controllerStandInVal = directiveStandIn;
+
+    if ($.isArray(ctrlValOrig ) ) {
+        controllerStandInVal = ctrlValOrig
+        controllerStandInVal.pop()
+        controllerStandInVal.push(directiveStandIn)
+    }
+
+
+    return controllerStandInVal
+
+}
+
+
+
+
+
+spgrtApp.directiveOld = spgrtApp.directive;
+spgrtApp.directive  = function addDirective_Reloadable(nameOfDirective, ctrl) {
+    // console.error('redirected', ctrlName, ctrl)
+    if ( nameOfDirective == 'helloWorld2') {
+        console.error('redirected', nameOfDirective)
+        return spgrtApp.directiveOld(nameOfDirective, forwardFxDir(nameOfDirective, ctrl));
+    } else {
+        return spgrtApp.directiveOld(nameOfDirective, ctrl);
+    }
+
+}
+
+
+/**
+ * How to reload?
+ * Use model that monitored files? Yes, different imps for differnt operating systems
+ * ns: find code that worked
+ *
+ * dal
+ */
 
 
 
