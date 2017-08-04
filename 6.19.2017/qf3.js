@@ -5,7 +5,7 @@
   var reload_name = 'quickform3';
   var urlPath= 'g/js/quick/';
   var urlPath= 'lib/reloadable/comps/';
-
+debugger
   var quickForm2 = function quickForm2_($templateRequest, $compile,
                                         $interpolate, transcludeHelper) {
 
@@ -1620,7 +1620,7 @@
 
   }
 
-
+  debugger
   if ( window.reloadableHelper ) {
     function defineQuickReloadingDir() {
       var app = angular.module('com.sync.quick');
@@ -1646,3 +1646,4 @@
 
 }());
 
+debugger
